@@ -37,5 +37,36 @@ void Net::feedForward(const vector<double> &inputVals)
 
 void Net::backProp(const vector<double>& targetVals)
 {
+	// calculate net error
+	Layers& outputLayer = m_layers.back();
 
+	m_error = 0.0;
+	for (unsigned n = 0; n < outputLayer.size() - 1; ++n)
+	{
+		double delta = targetVals[n] - outputLayer[n].getOutputVal();
+		m_error += delta * delta;
+	}
+	m_error /= outputLayer.size() - 1; // get average error squared
+	m_error = sqrt(m_error); // RMS
+
+	// recent average measurement
+	m_recentAverageError = (m_recentAverageError * m_recentAverageSmoothingFactor + m_error) / (m_recentAverageSmoothingFactor + 1.0);
+
+	// get output later gradients
+	for (unsigned n = 0; n < outputLayer.size() - 1; ++n)
+	{
+		outputLayer[n].calcOutputGradients(targetVals[n]);
+	}
+
+	// get gradients on hidden layers
+	for (unsigned layerNum = m_layers.size() - 2; layerNum > 0; --layerNum)
+	{
+		Layers& hiddenLayer = m_layers[layerNum];
+		Layers& nextLayer = m_layers[layerNum + 1];
+
+		for (unsigned n = 0; n < hiddenLayer.size(); ++n)
+		{
+			hiddenLayer[n].calcHiddenGradients(nextLayer);
+		}
+	}
 }

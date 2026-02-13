@@ -3,6 +3,10 @@
 #include <vector>
 #include <cmath>
 
+using namespace std;
+
+class Neuron;
+
 typedef vector<Neuron> Layers;
 
 using namespace std;

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include "Neuron.h"
 
 using namespace std;
@@ -16,4 +15,7 @@ public:
 
 private:
 	vector<Layers> m_layers; // m_layers[layerNum][neuronNum]
+	double m_error;
+	double m_recentAverageError;
+	double m_recentAverageSmoothingFactor;
 };
