@@ -69,4 +69,17 @@ void Net::backProp(const vector<double>& targetVals)
 			hiddenLayer[n].calcHiddenGradients(nextLayer);
 		}
 	}
+
+	// update weights
+	for (unsigned layerNum = m_layers.size() - 1; layerNum > 0; --layerNum)
+	{
+		Layers& layer = m_layers[layerNum];
+		Layers& prevLayer = m_layers[layerNum - 1];
+
+		for (unsigned n = 0; n < layer.size() - 1; ++n)
+		{
+			layer[n].updateInputWeights(prevLayer);
+		}
+	}
+
 }
