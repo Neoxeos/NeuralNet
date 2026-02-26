@@ -10,7 +10,7 @@ Net::Net(vector<unsigned> topology)
 		unsigned numOutputs = layerNum == topology.size() - 1 ? 0 : topology[layerNum + 1];
 		for (unsigned neuronNum = 0; neuronNum <= topology[layerNum]; ++neuronNum)
 		{
-			m_layers.back().push_back(Neuron(numOutputs, 0));
+			m_layers.back().push_back(Neuron(numOutputs, neuronNum));
 		}
 	}
 }
@@ -38,6 +38,8 @@ void Net::feedForward(const vector<double> &inputVals)
 void Net::backProp(const vector<double>& targetVals)
 {
 	// calculate net error
+
+	// output layer
 	Layers& outputLayer = m_layers.back();
 
 	m_error = 0.0;
@@ -82,4 +84,14 @@ void Net::backProp(const vector<double>& targetVals)
 		}
 	}
 
+}
+
+void Net::getResults(vector<double>& resultVals) const
+{
+	resultVals.clear();
+
+	for (unsigned n = 0; n < m_layers.back().size() - 1; ++n)
+	{
+		resultVals.push_back(m_layers.back()[n].getOutputVal());
+	}
 }

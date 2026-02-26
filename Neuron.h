@@ -22,6 +22,8 @@ public:
 	void updateInputWeights(Layers &prevLayer);
 
 private:
+	static double eta; // [0.0..1.0] overall net training rate
+	static double alpha; // [0.0..n] multiplier of last weight change (momentum)
 	static double activationFunction(double x) { return tanh(x); }
 	static double activationFunctionDerivative(double x) { return 1.0 - x * x; } //approx
 	double sumDOW(const Layers &nextLayer) const;

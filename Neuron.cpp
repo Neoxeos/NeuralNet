@@ -13,6 +13,8 @@ Neuron::Neuron(unsigned numOutputs, unsigned myIndex)
 	m_myIndex = myIndex;
 }
 
+double Neuron::eta = 0.15; // overall net training rate
+double Neuron::alpha = 0.5; // momentum, multiplier of last deltaWeight, [0.0..n]
 
 void Neuron::feedForward(const Layers &prevLayer)
 {
@@ -62,9 +64,9 @@ void Neuron::updateInputWeights(Layers &prevLayer)
 
 		double newDeltaWeight =
 			// individual input, magnified by the gradient and train rate
-			neuron.getOutputVal() * m_gradient * Net::getEta()
+			neuron.getOutputVal() * m_gradient * eta
 			// also add momentum = a fraction of the previous delta weight
-			+ oldDeltaWeight * Net::getAlpha();
+			+ oldDeltaWeight * alpha;
 
 		neuron.m_outputWeights[m_myIndex].second = newDeltaWeight;
 		neuron.m_outputWeights[m_myIndex].first += newDeltaWeight;
